@@ -1,0 +1,71 @@
+from struct import Struct
+
+from saphemu.auth.constants import LoginOpCode, LoginResult
+from saphemu.auth.login_connection_state import LoginConnectionState
+from saphemu.common.account.managers import AccountSessionManager
+from saphemu.common.crypto.sha1 import sha1
+from saphemu.common.log import LOG
+
+
+class ReconProof(object):
+    """ Handle a client's reconnection proof request (opcode 0x3). """
+
+    CONTENT_BIN       = Struct("<16s20s20sB")
+    RESPONSE_SUCC_BIN = Struct("<2B")
+    RESPONSE_FAIL_BIN = Struct("<2B")
+
+    def __init__(self, connection, packet):
+        self.conn = connection
+        self.packet = packet
+
+        self.proof_data = b""
+        self.client_proof = b""
+        self.unk_data = b""
+        self.unk = 0
+
+        self.local_proof = b""
+
+    def process(self):
+        self._parse_packet(self.packet)
+        self._generate_local_proof()
+        if self.client_proof == self.local_proof:
+            LOG.debug("Reconnection: correct proof")
+            response = self._get_success_response()
+            return LoginConnectionState.RECON_PROOF, response
+        else:
+            LOG.warning("Reconnection: wrong proof!")
+            response = self._get_failure_response()
+            return LoginConnectionState.CLOSED, response
+
+    def _parse_packet(self, packet):
+        data = self.CONTENT_BIN.unpack(packet)
+        self.proof_data = data[0]
+        self.client_proof = data[1]
+        self.unk_data = data[2]
+        self.unk = data[3]
+
+    def _generate_local_proof(self):
+        account_name = self.conn.account.name
+        session = AccountSessionManager.get_session(account_name)
+        if session is None:
+            LOG.warning("Reconnection proof: account wasn't logged in!")
+            return
+
+        challenge = self.conn.recon_challenge
+        to_hash = ( account_name.encode("ascii") + self.proof_data +
+                    challenge + session.session_key_as_bytes )
+        self.local_proof = sha1(to_hash)
+
+    def _get_success_response(self):
+        response = self.RESPONSE_SUCC_BIN.pack(
+            LoginOpCode.RECON_PROOF.value,
+            LoginResult.SUCCESS.value
+        )
+        return response
+
+    def _get_failure_response(self):
+        response = self.RESPONSE_FAIL_BIN.pack(
+            LoginOpCode.RECON_PROOF.value,
+            LoginResult.FAIL_1.value
+        )
+        return response
