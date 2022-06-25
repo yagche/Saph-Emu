@@ -1,7 +1,7 @@
 import unittest
 
-import durator.auth.srp as srp
-import durator.common.crypto.sha1 as sha1
+import saphemu.auth.srp as srp
+import saphemu.common.crypto.sha1 as sha1
 
 
 IDENT           = "IDENT"

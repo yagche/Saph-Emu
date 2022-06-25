@@ -1,2 +1,2 @@
-start "login" cmd /K python -m durator.main login
-start "world" cmd /K python -m durator.main world
+start "login" cmd /K python -m saphemu.main login
+start "world" cmd /K python -m saphemu.main world

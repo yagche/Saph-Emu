@@ -1,6 +1,6 @@
 import unittest
 
-from durator.world.handlers.game.player_login import *
+from saphemu.world.handlers.game.player_login import *
 
 
 class TestUpdateObject(unittest.TestCase):
