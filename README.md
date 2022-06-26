@@ -25,7 +25,6 @@ Dependencies:
 - MySQL
 - Peewee, the Python ORM used
 - Python MySQL driver
-- PyShgck
 
 ### Python 3.8+
 
