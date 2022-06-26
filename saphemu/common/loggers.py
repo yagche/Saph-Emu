@@ -1,22 +1,22 @@
-import logging
-import platform
 import ctypes
 import ctypes.util
+import logging
+import platform
 
 
 class _AnsiColorStreamHandler(logging.StreamHandler):
 
-    DEFAULT = '\x1b[0m'
-    RED     = '\x1b[31m'
-    GREEN   = '\x1b[32m'
-    YELLOW  = '\x1b[33m'
-    CYAN    = '\x1b[36m'
+    DEFAULT = "\x1b[0m"
+    RED = "\x1b[31m"
+    GREEN = "\x1b[32m"
+    YELLOW = "\x1b[33m"
+    CYAN = "\x1b[36m"
 
     CRITICAL = RED
-    ERROR    = RED
-    WARNING  = YELLOW
-    INFO     = GREEN
-    DEBUG    = CYAN
+    ERROR = RED
+    WARNING = YELLOW
+    INFO = GREEN
+    DEBUG = CYAN
 
     def __init__(self, stream=None):
         super().__init__(stream)
@@ -46,37 +46,37 @@ class _AnsiColorStreamHandler(logging.StreamHandler):
 # pylint: disable=W0212
 class _WinColorStreamHandler(logging.StreamHandler):
 
-    STD_INPUT_HANDLE     = -10
-    STD_OUTPUT_HANDLE    = -11
-    STD_ERROR_HANDLE     = -12
+    STD_INPUT_HANDLE = -10
+    STD_OUTPUT_HANDLE = -11
+    STD_ERROR_HANDLE = -12
 
-    FOREGROUND_BLACK     = 0x0000
-    FOREGROUND_BLUE      = 0x0001
-    FOREGROUND_GREEN     = 0x0002
-    FOREGROUND_CYAN      = 0x0003
-    FOREGROUND_RED       = 0x0004
-    FOREGROUND_MAGENTA   = 0x0005
-    FOREGROUND_YELLOW    = 0x0006
-    FOREGROUND_GREY      = 0x0007
+    FOREGROUND_BLACK = 0x0000
+    FOREGROUND_BLUE = 0x0001
+    FOREGROUND_GREEN = 0x0002
+    FOREGROUND_CYAN = 0x0003
+    FOREGROUND_RED = 0x0004
+    FOREGROUND_MAGENTA = 0x0005
+    FOREGROUND_YELLOW = 0x0006
+    FOREGROUND_GREY = 0x0007
     FOREGROUND_INTENSITY = 0x0008
-    FOREGROUND_WHITE     = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED
+    FOREGROUND_WHITE = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED
 
-    BACKGROUND_BLACK     = 0x0000
-    BACKGROUND_BLUE      = 0x0010
-    BACKGROUND_GREEN     = 0x0020
-    BACKGROUND_CYAN      = 0x0030
-    BACKGROUND_RED       = 0x0040
-    BACKGROUND_MAGENTA   = 0x0050
-    BACKGROUND_YELLOW    = 0x0060
-    BACKGROUND_GREY      = 0x0070
+    BACKGROUND_BLACK = 0x0000
+    BACKGROUND_BLUE = 0x0010
+    BACKGROUND_GREEN = 0x0020
+    BACKGROUND_CYAN = 0x0030
+    BACKGROUND_RED = 0x0040
+    BACKGROUND_MAGENTA = 0x0050
+    BACKGROUND_YELLOW = 0x0060
+    BACKGROUND_GREY = 0x0070
     BACKGROUND_INTENSITY = 0x0080
 
-    DEFAULT  = FOREGROUND_WHITE
+    DEFAULT = FOREGROUND_WHITE
     CRITICAL = FOREGROUND_RED | FOREGROUND_INTENSITY
-    ERROR    = FOREGROUND_RED | FOREGROUND_INTENSITY
-    WARNING  = FOREGROUND_YELLOW | FOREGROUND_INTENSITY
-    INFO     = FOREGROUND_GREEN
-    DEBUG    = FOREGROUND_CYAN
+    ERROR = FOREGROUND_RED | FOREGROUND_INTENSITY
+    WARNING = FOREGROUND_YELLOW | FOREGROUND_INTENSITY
+    INFO = FOREGROUND_GREEN
+    DEBUG = FOREGROUND_CYAN
 
     def __init__(self, stream=None):
         super().__init__(stream)
@@ -121,15 +121,14 @@ if platform.system() == "Windows":
 else:
     ColorStreamHandler = _AnsiColorStreamHandler
 
-
-_LOG_LEVEL   = logging.DEBUG
-_FORMAT      = "%(asctime)s %(levelname)-8s %(message)s"
+_LOG_LEVEL = logging.DEBUG
+_FORMAT = "%(asctime)s %(levelname)-8s %(message)s"
 _DATE_FORMAT = "%H:%M:%S"
 
 
-def get_logger( name="pyshgck", level=_LOG_LEVEL
-              , log_format=_FORMAT, date_format=_DATE_FORMAT
-              , into_stderr=True, into_log_file=None ):
+def get_logger(
+    name="pyshgck", level=_LOG_LEVEL, log_format=_FORMAT, date_format=_DATE_FORMAT, into_stderr=True, into_log_file=None
+):
     logger = logging.getLogger(name)
     logger.setLevel(level)
     formatter = logging.Formatter(fmt=log_format, datefmt=date_format)
@@ -145,6 +144,5 @@ def get_logger( name="pyshgck", level=_LOG_LEVEL
         file_handler.setLevel(level)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-
 
     return logger

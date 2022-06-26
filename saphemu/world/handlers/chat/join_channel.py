@@ -1,8 +1,8 @@
 import io
 from struct import Struct
 
-from saphemu.world.game.chat.notification import Notification, NotificationType
 from lib.utilities import read_cstring
+from saphemu.world.game.chat.notification import Notification, NotificationType
 
 
 class JoinChannelHandler:

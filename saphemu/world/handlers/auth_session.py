@@ -2,6 +2,7 @@ import io
 from enum import Enum
 from struct import Struct
 
+from lib.utilities import read_cstring, read_struct
 from saphemu.common.account.managers import AccountSessionManager
 from saphemu.common.crypto.session_cipher import SessionCipher
 from saphemu.common.crypto.sha1 import sha1
@@ -11,7 +12,6 @@ from saphemu.db.database import db_connection
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_connection_state import WorldConnectionState
 from saphemu.world.world_packet import WorldPacket
-from lib.utilities import read_cstring, read_struct
 
 
 class AuthSessionResponseCode(Enum):

@@ -2,13 +2,13 @@ import socket
 import threading
 import time
 
+from lib.utilities import simple_thread
 from saphemu.common.log import LOG
 from saphemu.config import CONFIG
 from saphemu.world.game.chat.manager import ChatManager
 from saphemu.world.game.object.manager import ObjectManager
 from saphemu.world.realm import Realm, RealmFlags, RealmId, RealmPopulation
 from saphemu.world.world_connection import WorldConnection
-from lib.utilities import simple_thread
 
 
 class WorldServer:

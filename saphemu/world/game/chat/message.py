@@ -4,10 +4,10 @@ import io
 from enum import Enum
 from struct import Struct
 
+from lib.utilities import read_cstring, read_struct
 from saphemu.world.game.chat.language import Language
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_packet import WorldPacket
-from lib.utilities import read_cstring, read_struct
 
 
 class ChatMessageType(Enum):

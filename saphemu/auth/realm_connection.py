@@ -3,6 +3,7 @@ import time
 
 from lib.utilities import read_cstring
 
+
 class RealmConnection:
     """Handle the connection with a world server to update the local login
     server realm state list."""
