@@ -1,11 +1,11 @@
 import traceback
 from struct import Struct
 
+from lib.utilities import get_data_dump as get_data_dump
 from saphemu.common.crypto.session_cipher import SessionCipher
 from saphemu.common.log import LOG
 from saphemu.config import DEBUG
 from saphemu.world.opcodes import OpCode
-from lib.utilities import get_data_dump as get_data_dump
 
 
 class WorldPacket:

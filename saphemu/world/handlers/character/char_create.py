@@ -2,12 +2,12 @@ import io
 from enum import Enum
 from struct import Struct
 
+from lib.utilities import read_cstring, read_struct
 from saphemu.common.log import LOG
 from saphemu.world.game.character.constants import CharacterClass, CharacterGender, CharacterRace
 from saphemu.world.game.character.manager import CharacterManager
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_packet import WorldPacket
-from lib.utilities import read_cstring, read_struct
 
 
 class CharCreateResponseCode(Enum):

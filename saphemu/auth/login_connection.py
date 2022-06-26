@@ -1,3 +1,4 @@
+from lib.utilities import get_data_dump
 from saphemu.auth.constants import LoginOpCode
 from saphemu.auth.login_challenge import LoginChallenge
 from saphemu.auth.login_connection_state import LoginConnectionState
@@ -9,7 +10,6 @@ from saphemu.auth.srp import Srp
 from saphemu.common.log import LOG
 from saphemu.common.networking.connection_automaton import ConnectionAutomaton
 from saphemu.config import DEBUG
-from lib.utilities import get_data_dump
 
 
 class LoginConnection(ConnectionAutomaton):
