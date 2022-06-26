@@ -12,7 +12,7 @@ There are very few sanity checks beside basic auth, and almost nothing that a
 client wouldn't do is checked for. It is also not meant to be an efficient
 implementation. It is in Python, and nothing is done to circumvent the GIL.
 
-This is a forked project to attempt to continue the journey that DuratorEmu has left
+This is a forked project to attempt to continue the journey that Durator-Emu has left
 for us.
 
 Use it to have fun exploring with a few friends, that's all.
@@ -21,13 +21,13 @@ Use it to have fun exploring with a few friends, that's all.
 
 Dependencies:
 
-- Python 3.4+
+- Python 3.8+
 - MySQL
 - Peewee, the Python ORM used
 - Python MySQL driver
 - PyShgck
 
-### Python 3.4+
+### Python 3.8+
 
 Get that from their website.
 
@@ -59,16 +59,9 @@ pip install peewee
 You only need one of them, preferably PyMySQL because that's the one I use, but
 both are available in PyPI:
 
-```bash
+````bash
 pip install pymysql
-# OR
-pip install mysqldb
-```
-
-### PyShgck
-
-Grab this [tag](https://github.com/Banamu/PyShgck) and install
-it with the setup batch file.
+``` cc
 
 ## Configuration
 
@@ -78,7 +71,7 @@ Configure the database and create an account with the database client
 cd Saphemu
 python3 -m saphemu.main db
 # use the commands 'install' and 'account'
-```
+````
 
 Then just use `start.bat`, or manually start the login and world servers in
 different consoles:

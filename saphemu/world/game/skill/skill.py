@@ -1,15 +1,15 @@
-from peewee import Model, IntegerField, ForeignKeyField
+from peewee import ForeignKeyField, IntegerField, Model
 
-from saphemu.world.game.character.character_data import CharacterData
 from saphemu.db.database import DB
+from saphemu.world.game.character.character_data import CharacterData
 
 
 class Skill(Model):
 
-    character      = ForeignKeyField(CharacterData)
-    ident          = IntegerField()
-    level          = IntegerField(default = 0)
-    stat_level     = IntegerField(default = 0)
+    character = ForeignKeyField(CharacterData)
+    ident = IntegerField()
+    level = IntegerField(default=0)
+    stat_level = IntegerField(default=0)
 
-    class Meta(object):
+    class Meta:
         database = DB

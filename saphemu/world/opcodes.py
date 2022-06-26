@@ -1,5 +1,4 @@
 """ Opcodes used to communicate between client and server.
-
 There are deliberately few opcodes written below, because I don't want to
 clutter this enum with opcodes I will never handle because they will likely not
 appear within the goal usages of this emulator. Most of them come from CMangos.

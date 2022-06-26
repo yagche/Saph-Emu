@@ -5,9 +5,9 @@ from saphemu.world.world_connection_state import WorldConnectionState
 from saphemu.world.world_packet import WorldPacket
 
 
-class LogoutRequestHandler(object):
-    """ Handle client logout request. Do not respect the retail logout timer,
-    just throw him away. """
+class LogoutRequestHandler:
+    """Handle client logout request. Do not respect the retail logout timer,
+    just throw him away."""
 
     LOGOUT_RESPONSE_BIN = Struct("<IB")
     LOGOUT_COMPLETE_BIN = Struct("<")

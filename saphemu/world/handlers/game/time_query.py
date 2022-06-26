@@ -5,8 +5,8 @@ from saphemu.world.opcodes import OpCode
 from saphemu.world.world_packet import WorldPacket
 
 
-class TimeQueryHandler(object):
-    """ Send the server current timestamp. """
+class TimeQueryHandler:
+    """Send the server current timestamp."""
 
     RESPONSE_BIN = Struct("<I")
 

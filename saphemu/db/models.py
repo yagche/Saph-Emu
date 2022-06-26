@@ -5,7 +5,6 @@ import saphemu.world.game.character.character_data
 import saphemu.world.game.skill.skill
 import saphemu.world.game.spell.spell
 
-
 MODELS = [
     saphemu.common.account.account.Account,
     saphemu.common.account.account_data.AccountData,
@@ -15,5 +14,5 @@ MODELS = [
     saphemu.world.game.character.character_data.CharacterPosition,
     saphemu.world.game.character.character_data.CharacterStats,
     saphemu.world.game.skill.skill.Skill,
-    saphemu.world.game.spell.spell.Spell
+    saphemu.world.game.spell.spell.Spell,
 ]

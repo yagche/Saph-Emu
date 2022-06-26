@@ -1,17 +1,17 @@
 import socket
 import threading
 import time
-
+import logging
 from saphemu.auth.login_connection import LoginConnection
 from saphemu.auth.realm_connection import RealmConnection
 from saphemu.common.account.managers import AccountSessionManager
-from saphemu.config import CONFIG
-from pyshgck.conc import simple_thread
 from saphemu.common.log import LOG
+from saphemu.config import CONFIG
+from lib.utilities import simple_thread
 
 
-class LoginServer(object):
-    """ Listen for clients and start a new thread for each connection.
+class LoginServer:
+    """Listen for clients and start a new thread for each connection.
 
     The LoginServer listens for clients (main socket) but also listens for realm
     servers in another thread to keep an up to date list of available servers.
@@ -30,11 +30,11 @@ class LoginServer(object):
     "last_update" of the last time it got updated by the remote world server.
     """
 
-    CLIENTS_HOST          = CONFIG["login"]["clients_conn_hostname"]
-    CLIENTS_PORT          = int(CONFIG["login"]["clients_conn_port"])
-    REALMS_HOST           = CONFIG["login"]["realm_conn_hostname"]
-    REALMS_PORT           = int(CONFIG["login"]["realm_conn_port"])
-    BACKLOG_SIZE          = 64
+    CLIENTS_HOST = CONFIG["login"]["clients_conn_hostname"]
+    CLIENTS_PORT = int(CONFIG["login"]["clients_conn_port"])
+    REALMS_HOST = CONFIG["login"]["realm_conn_hostname"]
+    REALMS_PORT = int(CONFIG["login"]["realm_conn_port"])
+    BACKLOG_SIZE = 64
     REALM_MAX_UPDATE_TIME = int(CONFIG["login"]["realm_max_update_time"])
 
     def __init__(self):
@@ -43,11 +43,10 @@ class LoginServer(object):
         self.realms = {}
         self.shutdown_flag = threading.Event()
 
-        self.locks = { attr: threading.Lock() for attr in
-                       ["realms_socket", "realms"] }
+        self.locks = {attr: threading.Lock() for attr in ["realms_socket", "realms"]}
 
     def start(self):
-        LOG.info("Starting login server")
+        LOG.info('Starting x2')
         self._start_listen()
 
         simple_thread(self._accept_realms)
@@ -59,8 +58,8 @@ class LoginServer(object):
         LOG.info("Login server stopped.")
 
     def _start_listen(self):
-        """ Start listening with non-blocking sockets, to still capture
-        Windows signals. """
+        """Start listening with non-blocking sockets, to still capture
+        Windows signals."""
         self._listen_clients()
         self._listen_realms()
 
@@ -68,9 +67,9 @@ class LoginServer(object):
         self._stop_listen_clients()
         self._stop_listen_realms()
 
-    #------------------------------
+    # ------------------------------
     # Clients connection
-    #------------------------------
+    # ------------------------------
 
     def _listen_clients(self):
         self.clients_socket = socket.socket()
@@ -80,7 +79,7 @@ class LoginServer(object):
         self.clients_socket.listen(self.BACKLOG_SIZE)
 
     def _accept_clients(self):
-        """ Accept incoming clients connections until manual interruption. """
+        """Accept incoming clients connections until manual interruption."""
         try:
             while not self.shutdown_flag.is_set():
                 self._try_accept_client()
@@ -95,25 +94,25 @@ class LoginServer(object):
             pass
 
     def _handle_client(self, connection, address):
-        """ Start another thread to securely handle the client connection. """
+        """Start another thread to securely handle the client connection."""
         address_string = str(address[0]) + ":" + str(address[1])
         LOG.info("Accepting client connection from " + address_string)
         login_connection = LoginConnection(self, connection)
         simple_thread(login_connection.handle_connection)
 
     def accept_account_login(self, account, session_key):
-        """ Accept the account login in the active sessions table. """
+        """Accept the account login in the active sessions table."""
         AccountSessionManager.add_session(account, session_key)
 
     def get_realm_list(self):
-        """ Return a copy of the realm states dict. """
+        """Return a copy of the realm states dict."""
         self._maintain_realm_list()
         with self.locks["realms"]:
             realm_list_copy = self.realms.copy()
         return realm_list_copy
 
     def _maintain_realm_list(self):
-        """ Maintain realmlist by removing realms not updated for a while. """
+        """Maintain realmlist by removing realms not updated for a while."""
         with self.locks["realms"]:
             to_remove = []
             for realm in self.realms:
@@ -128,9 +127,9 @@ class LoginServer(object):
         self.clients_socket.close()
         self.clients_socket = None
 
-    #------------------------------
+    # ------------------------------
     # World servers connection
-    #------------------------------
+    # ------------------------------
 
     def _listen_realms(self):
         self.realms_socket = socket.socket()
@@ -140,8 +139,8 @@ class LoginServer(object):
         self.realms_socket.listen(self.BACKLOG_SIZE)
 
     def _accept_realms(self):
-        """ Accept incoming realm connections forever, so this has to run in
-        another thread. """
+        """Accept incoming realm connections forever, so this has to run in
+        another thread."""
         while not self.shutdown_flag.is_set():
             with self.locks["realms_socket"]:
                 try:
@@ -151,7 +150,7 @@ class LoginServer(object):
                     pass
 
     def _handle_realm(self, connection, address):
-        """ Start another thread to securely handle the realm connection. """
+        """Start another thread to securely handle the realm connection."""
         realm_connection = RealmConnection(self, connection, address)
         simple_thread(realm_connection.handle_connection)
 
