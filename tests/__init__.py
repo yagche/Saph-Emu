@@ -1,3 +1,3 @@
-import logging 
+import logging
 
 logging.info("HELLO")

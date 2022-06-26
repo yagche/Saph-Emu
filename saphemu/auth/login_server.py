@@ -1,13 +1,14 @@
+import logging
 import socket
 import threading
 import time
-import logging
+
+from lib.utilities import simple_thread
 from saphemu.auth.login_connection import LoginConnection
 from saphemu.auth.realm_connection import RealmConnection
 from saphemu.common.account.managers import AccountSessionManager
 from saphemu.common.log import LOG
 from saphemu.config import CONFIG
-from lib.utilities import simple_thread
 
 
 class LoginServer:
@@ -46,7 +47,7 @@ class LoginServer:
         self.locks = {attr: threading.Lock() for attr in ["realms_socket", "realms"]}
 
     def start(self):
-        LOG.info('Starting x2')
+        LOG.info("Starting x2")
         self._start_listen()
 
         simple_thread(self._accept_realms)
