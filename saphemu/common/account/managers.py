@@ -5,6 +5,7 @@ from saphemu.common.account.account_session import AccountSession
 from saphemu.common.crypto.md5 import md5
 from saphemu.common.log import LOG
 from saphemu.db.database import db_connection
+from saphemu.world.game.character.character_data import CharacterData
 
 
 class AccountManager:
@@ -126,3 +127,17 @@ class AccountSessionManager:
     def delete_all_sessions():
         """Delete all account sessions to clean up the database."""
         AccountSession.delete().execute()
+
+
+class CharacterManager:
+
+    @staticmethod
+    @db_connection
+    def get_character(character_name):
+        """Return the account from the database if it exists, or None."""
+        try:
+            character_guid = CharacterData.get(CharacterData.name == character_name).guid
+            return character_guid
+        except CharacterData.DoesNotExist:
+            LOG.warning("No character exists with that name  " + character_name)
+            return None

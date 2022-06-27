@@ -12,7 +12,6 @@ class JoinChannelHandler:
     def __init__(self, connection, packet):
         self.conn = connection
         self.packet = packet
-
         self.channel_name = ""
         self.password = ""
 

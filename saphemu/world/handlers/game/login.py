@@ -37,14 +37,15 @@ class PlayerLoginHandler:
 
     def process(self):
         guid = self.PACKET_BIN.unpack(self.packet)[0]
+        LOG.info(guid)
         character_data = self._get_checked_character(guid)
+        LOG.error(character_data)
         if character_data is None:
             LOG.warning("Account {} tried to illegally use character {}".format(self.conn.account.name, guid))
             return self.conn.MAIN_ERROR_STATE, None
 
         # Now that we have the character data, spawn a new player object.
         self.conn.set_player(character_data)
-
         # Finally, send the packets necessary to let the client get in world.
         # Only the tutorial flags and update object packets are really necessary
         # to let the client show the world.
@@ -52,11 +53,10 @@ class PlayerLoginHandler:
         self.conn.send_packet(self._get_account_data_md5_packet())
         self.conn.send_packet(self._get_tutorial_flags_packet())
         self.conn.send_packet(self._get_update_object_packet())
-        # self.conn.send_packet(self._get_initial_spells_packet())
+        self.conn.send_packet(self._get_initial_spells_packet())
 
         self._get_near_objects()
         self._notify_near_players()
-
         return WorldConnectionState.IN_WORLD, None
 
     @db_connection
@@ -64,7 +64,7 @@ class PlayerLoginHandler:
         """Get the character data associated to that GUID, but only if this
         character belongs to the connected account, else return None."""
         try:
-            character = CharacterData.get(CharacterData.guid == guid and CharacterData.account == self.conn.account)
+            character = CharacterData.get(CharacterData.account == self.conn.account and CharacterData.guid == guid)
             return character
         except CharacterData.DoesNotExist:
             return None

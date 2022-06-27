@@ -13,7 +13,7 @@ from saphemu.world.game.object.type.player import Player
 from saphemu.world.game.player_spawn_packet import PlayerSpawnPacket
 from saphemu.world.game.update_object_packet import UpdateObjectPacket, UpdateType
 from saphemu.world.world_connection_state import WorldConnectionState
-
+from saphemu.db.database import db_connection
 
 def lock(func):
     def lock_decorator(self, *args, **kwargs):
@@ -114,9 +114,7 @@ class ObjectManager(BaseObjectManager):
         ref_guid = ref_player.guid
         dist_range = float(CONFIG["world"]["update_range"])
         players_guids = self.players_in_range_of(ref_player, dist_range)
-
         update_movement_guids, update_create_guids = self._tracking_and_untracking_players(ref_guid, players_guids, update=True)
-
         infos = {"object": ref_player, "is_player": False}
         create_packet = PlayerSpawnPacket(infos)
         movement_packet = UpdateObjectPacket(UpdateType.MOVEMENT, infos)
@@ -337,6 +335,8 @@ class _PlayerManager(BaseObjectManager):
     def __init__(self, server):
         super().__init__(server)
 
+    def get_player(self, guid):
+        return self._get_object(guid)
     # ----------------------------------------
     # Add players to world
     # ----------------------------------------
@@ -401,8 +401,6 @@ class _PlayerManager(BaseObjectManager):
     # Access players data
     # ----------------------------------------
 
-    def get_player(self, guid):
-        return self._get_object(guid)
 
     def get_guids(self):
         return self._get_guids()
