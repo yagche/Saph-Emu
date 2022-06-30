@@ -9,16 +9,16 @@ class TestUpdateObject(unittest.TestCase):
         update = ObjectUpdate()
 
         update.add(UpdateFieldObject.GUID, 0xDEAD)
-        self.assertEquals(update.mask_blocks, [0b00011])
-        self.assertEquals(len(update.update_blocks), 1)
+        self.assertEqual(update.mask_blocks, [0b00011])
+        self.assertEqual(len(update.update_blocks), 1)
 
         update.add(UpdateFieldObject.SCALE_X, 1.0)
-        self.assertEquals(update.mask_blocks, [0b10011])
-        self.assertEquals(len(update.update_blocks), 2)
+        self.assertEqual(update.mask_blocks, [0b10011])
+        self.assertEqual(len(update.update_blocks), 2)
 
         update.add(UpdateFieldObject.TYPE, 0x19)
-        self.assertEquals(update.mask_blocks, [0b10111])
-        self.assertEquals(len(update.update_blocks), 3)
+        self.assertEqual(update.mask_blocks, [0b10111])
+        self.assertEqual(len(update.update_blocks), 3)
 
     def test_to_bytes(self):
         """to_bytes, with a few simple fields"""
@@ -30,4 +30,4 @@ class TestUpdateObject(unittest.TestCase):
         expected = (
             int.to_bytes(0b10111, 4, "little") + b"\xAD\xDE\x00\x00\x00\x00\x00\x00" + b"\x00\x00\x80\x3F" + b"\x19\x00\x00\x00"
         )
-        self.assertEquals(data, expected)
+        self.assertEqual(data, expected)

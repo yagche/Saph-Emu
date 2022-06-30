@@ -47,7 +47,7 @@ class LoginServer:
         self.locks = {attr: threading.Lock() for attr in ["realms_socket", "realms"]}
 
     def start(self):
-        LOG.info('Starting login server')
+        LOG.info("Starting login server")
         self._start_listen()
 
         simple_thread(self._accept_realms)

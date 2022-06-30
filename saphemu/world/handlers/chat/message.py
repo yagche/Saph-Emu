@@ -1,4 +1,5 @@
 from struct import Struct
+
 from saphemu.world.game.chat.message import ChatMessageType, ClientChatMessage
 from saphemu.world.game.chat.notification import Notification, NotificationType
 
@@ -56,6 +57,5 @@ class MessageHandler:
             channel_name = None
             notification = Notification(NotificationType.PLAYER_NOT_FOUND, channel_name)
             return notification.to_packet()
-        except:
+        except BaseException:
             return None
-
