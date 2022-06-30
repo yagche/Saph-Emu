@@ -15,13 +15,13 @@ class TestSrp(unittest.TestCase):
     def test_generate_verifier(self):
         salt_bytes = int.to_bytes(SALT, 32, "little")
         verifier = srp.Srp._generate_verifier(IDENT, IDENT, salt_bytes)
-        self.assertEquals(verifier, VERIFIER)
+        self.assertEqual(verifier, VERIFIER)
 
     def test_scramble(self):
         big_a = SOME_CLIENT_EPH
         big_b = SOME_SERVER_EPH
         scramble = srp.Srp._scramble_a_b(big_a, big_b)
-        self.assertEquals(scramble, SCRAMBLED_EPHS)
+        self.assertEqual(scramble, SCRAMBLED_EPHS)
 
     def test_sha1_interleave(self):
         big_int = 1555674156741514756417567416567415647156
@@ -30,4 +30,4 @@ class TestSrp(unittest.TestCase):
             b"\xe0C\xdb\xdc\xfb\xf7\xf7\x04\x8b\xa8\x12\r/4SjR^7:\x86U"
         )
         result = sha1.sha1_interleave(big_int)
-        self.assertEquals(result, expected)
+        self.assertEqual(result, expected)

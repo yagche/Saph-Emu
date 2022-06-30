@@ -6,13 +6,14 @@ maybe, but in the meantime the common channel is global to the server.
 
 import threading
 
+from saphemu.common.account.managers import CharacterManager
 from saphemu.common.log import LOG
 from saphemu.world.game.chat.channel import Channel
 from saphemu.world.game.chat.message import ChatMessageType, ServerChatMessage
 from saphemu.world.game.chat.notification import Notification, NotificationType
-from saphemu.world.world_connection_state import WorldConnectionState
 from saphemu.world.game.object.manager import _PlayerManager
-from saphemu.common.account.managers import CharacterManager
+from saphemu.world.world_connection_state import WorldConnectionState
+
 INTERNAL_NAME_PREFIX_MAP = {"General - ": 1, "Trade - ": 2, "LocalDefense - ": 3}
 
 
@@ -167,7 +168,7 @@ class ChatManager:
             return self._send_global_chat_message(sender, message)
         elif message.message_type is ChatMessageType.WHISPER:
             channel = self.get_channel(message.channel_name)
-            return self._send_whisper_message(channel, sender, message) 
+            return self._send_whisper_message(channel, sender, message)
         else:
             return 3
 
@@ -188,9 +189,9 @@ class ChatManager:
         server_message = ServerChatMessage()
         try:
             receiver_guid = CharacterManager.get_character(message.channel_name)
-        except: 
+        except BaseException:
             return None
-        if receiver_guid != None: 
+        if receiver_guid is not None:
             server_message.load_client_message(message)
             server_message.sender_guid = sender
             message_packet = server_message.to_packet()

@@ -130,7 +130,6 @@ class AccountSessionManager:
 
 
 class CharacterManager:
-
     @staticmethod
     @db_connection
     def get_character(character_name):

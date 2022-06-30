@@ -18,7 +18,7 @@ class NotificationType(Enum):
     # NOT_MODERATOR         = 0x06
     # PASSWORD_CHANGED      = 0x07
     # OWNER_CHANGED         = 0x08
-    PLAYER_NOT_FOUND      = 0x09
+    PLAYER_NOT_FOUND = 0x09
     # NOT_OWNER             = 0x0A
     # CHANNEL_OWNER         = 0x0B
     # MODE_CHANGE           = 0x0C

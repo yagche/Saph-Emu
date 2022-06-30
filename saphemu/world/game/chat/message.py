@@ -5,10 +5,11 @@ from enum import Enum
 from struct import Struct
 
 from lib.utilities import read_cstring, read_struct
+from saphemu.common.log import LOG
 from saphemu.world.game.chat.language import Language
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_packet import WorldPacket
-from saphemu.common.log import LOG
+
 
 class ChatMessageType(Enum):
 
@@ -81,7 +82,7 @@ class ClientChatMessage:
 
         if message.message_type == ChatMessageType.CHANNEL or message.message_type == ChatMessageType.WHISPER:
             channel_name = read_cstring(data_io)
-            message.language= Language.UNIVERSAL
+            message.language = Language.UNIVERSAL
             message.channel_name = channel_name.decode("utf8")
 
         content = read_cstring(data_io)

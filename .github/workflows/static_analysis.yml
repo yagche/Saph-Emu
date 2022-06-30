@@ -1,0 +1,67 @@
+name: Static Analysis
+
+on:
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Set up Node 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - name: Install Analysis and Autoformatting Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade wheel
+          pip install --upgrade autopep8 black vulture yapf typing_extensions pyupgrade isort cohesion mccabe naming bandit
+          pip install --upgrade pylint perflint pycodestyle mypy
+          pip install --upgrade flake8 pyflakes flake8-annotations-complexity flake8-comprehensions flake8-eradicate flake8-expression-complexity flake8_isort flake8-cognitive-complexity flake8_builtins flake8-functions       
+          npm install -g prettier
+      - name: Test with Bandit
+        run: |
+          bandit -q -ii -lll -r .
+      - name: Test with Pylint
+        run: |
+          pylint $(git ls-files '*.py') -d all -e W0102,W0106,W0621,R0123,E1102,E1123 -f text -r y -s y --fail-under 9.99
+      - name: Test with Flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82,F401 --show-source --statistics
+      - name: Test with Vulture
+        run: |
+          vulture . --min-confidence 65
+      - name: Evaluate with Bandit
+        run: |
+          bandit -q -i -l --exit-zero -r .
+      - name: Evaluate with Flake8
+        run: |
+          flake8 . --count --exit-zero --max-complexity=10 --max-cognitive-complexity=10 --statistics --ignore E203,E501,E800,I001,I005,W503
+      - name: Evaluate with Perflint
+        run: |
+          perflint $(git ls-files '*.py') -f text -r y -s y --fail-under 9.00
+      - name: Evaluate with Pylint
+        run: |
+          pylint $(git ls-files '*.py') -d C0114,C0115,C0116,C0301,C0302,E0401,W0511,W0703,W1203,R0801,E1120 -f text -r y -s y --fail-under 9.50
+      - name: Auto Formmating
+        if: success()
+        run: |
+          git fetch -q
+          git checkout ${{github.head_ref}} --progress
+          git config --global user.name "Auspex Automatic"
+          git config --global user.email "contact@auspex-labs.com"
+          autopep8 . -r --max-line-length 132 --aggressive -i
+          yapf . -r -i --style pep8 --no-local-style -vv
+          isort --atomic --py 39 .
+          pyupgrade --py39-plus --exit-zero-even-if-changed $(git ls-files '*.py')
+          black . -l 132 -t py39
+          npx prettier . -u --print-width 132 -w
+          git add . -v
+          git commit -m "Apply Autoformatting" --allow-empty
+          git push -v
