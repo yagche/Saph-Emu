@@ -26,7 +26,7 @@ from saphemu.world.handlers.ping import PingHandler
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_connection_state import WorldConnectionState
 from saphemu.world.world_packet import WorldPacket, WorldPacketReceiver
-
+from saphemu.world.handlers.gm.GMTicketHandler import GMTicketHandler
 
 class WorldConnection(ConnectionAutomaton):
     """Handle the communication between a client and the world server.
@@ -96,6 +96,7 @@ class WorldConnection(ConnectionAutomaton):
         OpCode.CMSG_AUTH_SESSION: AuthSessionHandler,
         OpCode.CMSG_ZONEUPDATE: ZoneUpdateHandler,
         OpCode.CMSG_UPDATE_ACCOUNT_DATA: UpdateAccountDataHandler,
+        OpCode.CMSG_GMTICKET_CREATE: GMTicketHandler
     }
 
     INIT_STATE = WorldConnectionState.INIT
