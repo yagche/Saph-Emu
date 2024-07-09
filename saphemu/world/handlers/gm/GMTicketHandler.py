@@ -2,9 +2,22 @@ from struct import Struct
 import io
 from saphemu.world.opcodes import OpCode
 from saphemu.world.world_packet import WorldPacket
-from pyshgck.bin import read_cstring
 from enum import Enum
 from saphemu.common.log import LOG
+
+# https://github.com/dece/PyShgck/blob/f10c40693d0809be510d85adf0e65bf6aa1384e3/pyshgck/bin.py#L8C1-L19C1
+def read_cstring(file_object):
+    """ Read the 0-terminated string from file_object and return the bytes
+    object (terminator excluded). """
+    cstring = b""
+    while True:
+        char = file_object.read(1)
+        if char and char != b"\x00":
+            cstring += char
+        else:
+            break
+    return cstring
+
 
 class GMTicketResponse(Enum):
     SUCCESS             = 0x2D

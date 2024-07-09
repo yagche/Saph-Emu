@@ -38,9 +38,12 @@ account to access this database.
 
 Quick MySQL database setup:
 
-- CREATE DATABASE saphemu;
-- CREATE USER 'saphemu'@'%' IDENTIFIED BY 'saphemu'
-- GRANT ALL PRIVILEGES ON saphemu.\* TO 'saphemu'@'%' IDENTIFIED BY 'saphemu';
+```
+DROP USER IF EXISTS 'saphemu'@'localhost';
+CREATE USER 'saphemu'@'localhost' IDENTIFIED BY 'saphemu' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;
+GRANT ALL PRIVILEGES ON * . * TO 'saphemu'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE `saphemu` DEFAULT CHARACTER SET UTF8MB4 COLLATE utf8mb4_unicode_ci;
+```
 
 Feel free to use other credentials (but update the database code configuration),
 and to narrow the hostname to something more private than a full wildcard.
@@ -67,6 +70,7 @@ pip install pymysql
 Configure the database and create an account with the database client
 
 ```bash
+
 cd Saphemu
 python3 -m saphemu.main db
 # use the commands 'install' and 'account'
